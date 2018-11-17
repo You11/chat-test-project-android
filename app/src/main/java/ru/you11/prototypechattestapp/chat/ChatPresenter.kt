@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.User
 
-class ChatPresenter(chatView: ChatFragment): ChatContract.Presenter {
+class ChatPresenter(private val chatView: ChatFragment): ChatContract.Presenter {
 
     init {
         chatView.presenter = this

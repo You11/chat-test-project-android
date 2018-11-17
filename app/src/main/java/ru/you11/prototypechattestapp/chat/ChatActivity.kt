@@ -10,9 +10,12 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        supportFragmentManager.beginTransaction().replace(
-            R.id.content_frame,
-            ChatFragment()
-        ).commit()
+        val fragment = ChatFragment()
+
+        ChatPresenter(fragment)
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.content_frame, fragment)
+            .commit()
     }
 }
