@@ -1,7 +1,7 @@
 package ru.you11.prototypechattestapp
 
-class Message(id: String,
-              content: String,
-              from: User) {
+data class Message(val id: Int,
+              val content: String,
+              val from: User) {
 
 }

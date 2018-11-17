@@ -1,6 +1,7 @@
 package ru.you11.prototypechattestapp
 
-class User(id: String,
-           name: String) {
+class User(id: Int,
+           name: String,
+           avatarUrl: String? = null) {
 
 }

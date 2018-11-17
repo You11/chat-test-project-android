@@ -12,6 +12,8 @@ interface ChatContract {
         fun showMessages()
 
         fun showReceiveMessagesError()
+
+        fun sendMessage()
     }
 
     interface Presenter: BasePresenter {
