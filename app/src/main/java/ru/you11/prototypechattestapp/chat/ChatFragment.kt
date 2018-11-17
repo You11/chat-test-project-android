@@ -1,19 +1,23 @@
 package ru.you11.prototypechattestapp.chat
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.R
 import ru.you11.prototypechattestapp.User
 
-class ChatFragment: Fragment(), ChatContract.View {
+class ChatFragment: Fragment(), Contract.Chat.View {
 
-    override lateinit var presenter: ChatContract.Presenter
+    override lateinit var presenter: Contract.Chat.Presenter
 
     private lateinit var recyclerView: RecyclerView
 

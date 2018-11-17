@@ -7,21 +7,14 @@
 
     <EditText android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/login_email_email"
-            android:hint="@string/login_email_email_hint_text"
-            android:inputType="textEmailAddress"/>
-
-    <EditText android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/login_email_password"
-            android:hint="@string/login_email_password_hint_text"
-            android:inputType="textPassword"
-            android:layout_below="@id/login_email_email"/>
+            android:id="@+id/login_username"
+            android:hint="@string/login_username_hint_text"
+            android:inputType="text"/>
 
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/login_email_login_button"
-            android:text="@string/login_email_login_button_text"
-            android:layout_below="@id/login_email_password"/>
+            android:id="@+id/login_button"
+            android:text="@string/login_button_text"
+            android:layout_below="@id/login_username"/>
 
 </RelativeLayout>
