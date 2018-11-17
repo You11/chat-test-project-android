@@ -1,6 +1,5 @@
 package ru.you11.prototypechattestapp.chat
 
-import android.support.v4.app.Fragment
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.User
 
