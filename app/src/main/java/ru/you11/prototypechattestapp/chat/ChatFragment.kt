@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
 import ru.you11.prototypechattestapp.Message
@@ -21,6 +19,7 @@ class ChatFragment: Fragment(), ChatContract.View {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+        setHasOptionsMenu(true)
         val root = inflater.inflate(R.layout.fragment_chat, container, false)
         with(root) {
             recyclerView = findViewById(R.id.messages_rv)
@@ -34,6 +33,23 @@ class ChatFragment: Fragment(), ChatContract.View {
     override fun onResume() {
         super.onResume()
         presenter.start()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_chat, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_sign_out_user -> {
+                presenter.signOutUser()
+                true
+            }
+
+            else -> {
+                false
+            }
+        }
     }
 
     private fun setupRecyclerView() {

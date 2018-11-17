@@ -23,5 +23,7 @@ interface ChatContract {
         fun getMessages(): ArrayList<Message>
 
         fun getCurrentUser(): User
+
+        fun signOutUser()
     }
 }
