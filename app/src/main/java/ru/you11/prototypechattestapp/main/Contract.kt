@@ -25,7 +25,7 @@ interface Contract {
 
             fun sendMessage(content: String)
 
-            fun getMessages()
+            fun setMessengersListener()
 
             fun getCurrentUser(): User
 

@@ -8,8 +8,9 @@ import android.view.*
 import android.widget.*
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.R
-import ru.you11.prototypechattestapp.User
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChatFragment: Fragment(), Contract.Chat.View {
 
@@ -100,6 +101,8 @@ class ChatFragment: Fragment(), Contract.Chat.View {
 
         class ViewHolder(val layout: LinearLayout): RecyclerView.ViewHolder(layout) {
             val message = layout.findViewById<TextView>(R.id.message_text)
+            val sender = layout.findViewById<TextView>(R.id.message_sender)
+            val sentDate = layout.findViewById<TextView>(R.id.message_sent_date)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -108,6 +111,11 @@ class ChatFragment: Fragment(), Contract.Chat.View {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.message.text = messages[position].content
+            holder.sender.text = messages[position].sender.name
+
+            val sdt = SimpleDateFormat("HH:mm dd-MM-yy", Locale.getDefault())
+
+            holder.sentDate.text = sdt.format(messages[position].sendDate)
         }
 
         override fun getItemCount(): Int {

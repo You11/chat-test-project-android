@@ -9,14 +9,14 @@ import ru.you11.prototypechattestapp.R
 import ru.you11.prototypechattestapp.User
 import java.util.*
 
-class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter {
+class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presenter {
 
     init {
         chatView.presenter = this
     }
 
     override fun start() {
-        getMessages()
+        setMessengersListener()
     }
 
     override fun sendMessage(content: String) {
@@ -33,15 +33,12 @@ class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter
         val messagesHashMapRoot = HashMap<String, Any>()
         messagesHashMapRoot["messages"] = FieldValue.arrayUnion(messageHashMap)
         db.collection("chats").document("chat").update(messagesHashMapRoot)
-            .addOnSuccessListener {
-                getMessages()
-            }
             .addOnFailureListener { exception ->
                 chatView.showSendMessageError(exception)
             }
     }
 
-    override fun getMessages() {
+    override fun setMessengersListener() {
         val db = FirebaseFirestore.getInstance()
         db.collection("chats").document("chat").addSnapshotListener { document, exception ->
 
@@ -54,10 +51,13 @@ class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter
             if (document?.data?.get("messages") == null) return@addSnapshotListener
             val messagesData = document.data?.get("messages") as ArrayList<HashMap<String, Any>>
             messagesData.forEach { it ->
-                results.add(Message(
+                results.add(
+                    Message(
                         content = it["content"] as String,
                         sender = User(it["sender"] as String),
-                        sendDate = (Date(it["sentDate"] as Long))))
+                        sendDate = (Date(it["sentDate"] as Long))
+                    )
+                )
             }
 
             chatView.showMessages(results)
