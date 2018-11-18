@@ -11,7 +11,9 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".main.Activity" >
+        <activity android:name=".main.Activity"
+                  android:windowSoftInputMode="adjustResize"
+                  android:label="@string/activity_chat_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

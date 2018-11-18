@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">PrototypeChatTestApp</string>
 
+    <string name="activity_chat_label">Chat</string>
+
     <string name="message_bar_send_button_text">SEND</string>
     <string name="message_bar_edit_text_hint">Input message</string>
 

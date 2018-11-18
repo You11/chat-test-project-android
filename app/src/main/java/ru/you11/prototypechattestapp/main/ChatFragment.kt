@@ -1,10 +1,11 @@
 package ru.you11.prototypechattestapp.main
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import ru.you11.prototypechattestapp.Message
@@ -12,6 +13,7 @@ import ru.you11.prototypechattestapp.R
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.Toast
 
 class ChatFragment: Fragment(), Contract.Chat.View {
 
@@ -28,10 +30,20 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         val root = inflater.inflate(R.layout.fragment_chat, container, false)
         with(root) {
             recyclerView = findViewById(R.id.messages_rv)
-            messageInputView = findViewById(R.id.message_bar_edit_text)
-            messageInputView.setOnClickListener {
+            recyclerView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
                 recyclerView.scrollToPosition(messages.size - 1)
             }
+            
+            messageInputView = findViewById(R.id.message_bar_edit_text)
+            messageInputView.addTextChangedListener(object: TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    sendButton.isEnabled = text != null && text.isNotBlank()
+                }
+
+            })
             sendButton = findViewById(R.id.message_bar_send_button)
 
             sendButton.setOnClickListener {
@@ -110,9 +122,9 @@ class ChatFragment: Fragment(), Contract.Chat.View {
     class MessengerRVAdapter(private val messages: ArrayList<Message>): RecyclerView.Adapter<MessengerRVAdapter.ViewHolder>() {
 
         class ViewHolder(val layout: LinearLayout): RecyclerView.ViewHolder(layout) {
-            val message = layout.findViewById<TextView>(R.id.message_text)
-            val sender = layout.findViewById<TextView>(R.id.message_sender)
-            val sentDate = layout.findViewById<TextView>(R.id.message_sent_date)
+            val message: TextView = layout.findViewById(R.id.message_text)
+            val sender: TextView = layout.findViewById(R.id.message_sender)
+            val sentDate: TextView = layout.findViewById(R.id.message_sent_date)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
