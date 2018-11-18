@@ -44,7 +44,7 @@ class LoginFragment: Fragment(), Contract.Login.View {
 
     override fun showLoginError(exception: Exception?) {
         if (exception == null) {
-            Toast.makeText(activity, resources.getString(R.string.login_unknown_error_text), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, resources.getString(R.string.unknown_error_text), Toast.LENGTH_SHORT).show()
             return
         } else {
             Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()

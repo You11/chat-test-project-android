@@ -5,11 +5,10 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.R
+import ru.you11.prototypechattestapp.User
 import java.lang.Exception
 
 class ChatFragment: Fragment(), Contract.Chat.View {
@@ -17,6 +16,8 @@ class ChatFragment: Fragment(), Contract.Chat.View {
     override lateinit var presenter: Contract.Chat.Presenter
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var messageInputView: EditText
+    private lateinit var sendButton: Button
     private val messages = ArrayList<Message>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -25,6 +26,12 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         val root = inflater.inflate(R.layout.fragment_chat, container, false)
         with(root) {
             recyclerView = findViewById(R.id.messages_rv)
+            messageInputView = findViewById(R.id.message_bar_edit_text)
+            sendButton = findViewById(R.id.message_bar_send_button)
+
+            sendButton.setOnClickListener {
+                sendMessage()
+            }
 
             setupRecyclerView()
         }
@@ -69,12 +76,20 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         if (exception != null) {
             Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(activity, resources.getString(R.string.login_unknown_error_text), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, resources.getString(R.string.unknown_error_text), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun showSendMessageError(exception: Exception?) {
+        if (exception != null) {
+            Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(activity, resources.getString(R.string.send_message_error_text), Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun sendMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        presenter.sendMessage(Message(0, messageInputView.text.toString(), presenter.getCurrentUser()))
     }
 
     class MessengerRVAdapter(private val messages: ArrayList<Message>): RecyclerView.Adapter<MessengerRVAdapter.ViewHolder>() {

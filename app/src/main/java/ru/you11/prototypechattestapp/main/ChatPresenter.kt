@@ -2,6 +2,7 @@ package ru.you11.prototypechattestapp.main
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.R
@@ -18,34 +19,53 @@ class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter
     }
 
     override fun sendMessage(message: Message) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val db = FirebaseFirestore.getInstance()
+
+        val messageHashMap = HashMap<String, Any>()
+        messageHashMap["content"] = message.content
+        messageHashMap["sender"] = message.sender.name
+
+        val messagesHashMapRoot = HashMap<String, Any>()
+        messagesHashMapRoot["messages"] = FieldValue.arrayUnion(messageHashMap)
+        db.collection("chats").document("chat").update(messagesHashMapRoot)
+            .addOnSuccessListener {
+                getMessages()
+            }
+            .addOnFailureListener { exception ->
+                chatView.showSendMessageError(exception)
+            }
     }
 
     override fun getMessages() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("chats").get()
-            .addOnCompleteListener { task ->
-                //TODO: refactoring
-                if (task.isComplete && task.result != null) {
-                    val document = task.result!!.documents[0]
-                    val results = ArrayList<Message>()
-                    val messagesData = document.data?.get("messages") as ArrayList<HashMap<String, String>>
-                    messagesData.forEachIndexed { index, hashMap ->
-                        results.add(Message(
-                            id = index,
-                            content = hashMap["text"]!!,
-                            from = User(hashMap["username"]!!)))
-                    }
+        db.collection("chats").document("chat").addSnapshotListener { document, exception ->
 
-                    chatView.showMessages(results)
-                } else {
-                    chatView.showReceiveMessagesError(task.exception)
-                }
+            if (exception != null) {
+                chatView.showReceiveMessagesError(exception)
             }
+
+            val results = ArrayList<Message>()
+
+            if (document?.data?.get("messages") == null) return@addSnapshotListener
+            val messagesData = document.data?.get("messages") as ArrayList<HashMap<String, String>>
+            messagesData.forEachIndexed { index, hashMap ->
+                results.add(
+                    Message(
+                        id = index,
+                        content = hashMap["content"]!!,
+                        sender = User(hashMap["sender"]!!)
+                    )
+                )
+            }
+
+            chatView.showMessages(results)
+        }
     }
 
     override fun getCurrentUser(): User {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val pref = chatView.activity?.getPreferences(Context.MODE_PRIVATE)
+        return User(pref?.getString(chatView.resources.getString(R.string.shared_pref_username_key), "anonymous")!!)
     }
 
     override fun signOutUser() {

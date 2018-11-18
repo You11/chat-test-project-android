@@ -1,3 +1,3 @@
 package ru.you11.prototypechattestapp
 
-class User(name: String)
+data class User(val name: String)

@@ -16,6 +16,8 @@ interface Contract {
 
             fun showReceiveMessagesError(exception: Exception?)
 
+            fun showSendMessageError(exception: Exception?)
+
             fun sendMessage()
         }
 
