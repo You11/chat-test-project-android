@@ -1,4 +1,4 @@
-package ru.you11.prototypechattestapp.chat
+package ru.you11.prototypechattestapp.main
 
 import ru.you11.prototypechattestapp.BasePresenter
 import ru.you11.prototypechattestapp.BaseView
@@ -12,9 +12,9 @@ interface Contract {
 
         interface View: BaseView<Presenter> {
 
-            fun showMessages()
+            fun showMessages(messages: ArrayList<Message>)
 
-            fun showReceiveMessagesError()
+            fun showReceiveMessagesError(exception: Exception?)
 
             fun sendMessage()
         }
@@ -23,7 +23,7 @@ interface Contract {
 
             fun sendMessage(message: Message)
 
-            fun getMessages(): ArrayList<Message>
+            fun getMessages()
 
             fun getCurrentUser(): User
 

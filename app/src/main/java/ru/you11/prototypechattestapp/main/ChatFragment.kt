@@ -1,25 +1,23 @@
-package ru.you11.prototypechattestapp.chat
+package ru.you11.prototypechattestapp.main
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.R
-import ru.you11.prototypechattestapp.User
+import java.lang.Exception
 
 class ChatFragment: Fragment(), Contract.Chat.View {
 
     override lateinit var presenter: Contract.Chat.Presenter
 
     private lateinit var recyclerView: RecyclerView
+    private val messages = ArrayList<Message>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -57,20 +55,22 @@ class ChatFragment: Fragment(), Contract.Chat.View {
     }
 
     private fun setupRecyclerView() {
-        val testMessages = ArrayList<Message>()
-        testMessages.add(Message(0, "meow", User(0, "123")))
-        testMessages.add(Message(1, "meow22", User(1, "123")))
-
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = MessengerRVAdapter(testMessages)
+        recyclerView.adapter = MessengerRVAdapter(messages)
     }
 
-    override fun showMessages() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showMessages(messages: ArrayList<Message>) {
+        this.messages.clear()
+        this.messages.addAll(messages)
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 
-    override fun showReceiveMessagesError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showReceiveMessagesError(exception: Exception?) {
+        if (exception != null) {
+            Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(activity, resources.getString(R.string.login_unknown_error_text), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun sendMessage() {

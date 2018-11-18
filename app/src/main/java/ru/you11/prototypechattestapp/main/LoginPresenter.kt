@@ -1,4 +1,4 @@
-package ru.you11.prototypechattestapp.chat
+package ru.you11.prototypechattestapp.main
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
