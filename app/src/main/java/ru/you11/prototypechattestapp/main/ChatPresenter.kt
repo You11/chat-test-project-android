@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import ru.you11.prototypechattestapp.Message
 import ru.you11.prototypechattestapp.R
 import ru.you11.prototypechattestapp.User
+import java.util.*
 
 class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter {
 
@@ -18,13 +19,16 @@ class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter
         getMessages()
     }
 
-    override fun sendMessage(message: Message) {
+    override fun sendMessage(content: String) {
+
+        val message = Message(content, getCurrentUser(), Calendar.getInstance().time)
 
         val db = FirebaseFirestore.getInstance()
 
         val messageHashMap = HashMap<String, Any>()
         messageHashMap["content"] = message.content
         messageHashMap["sender"] = message.sender.name
+        messageHashMap["sentDate"] = message.sendDate.time
 
         val messagesHashMapRoot = HashMap<String, Any>()
         messagesHashMapRoot["messages"] = FieldValue.arrayUnion(messageHashMap)
@@ -48,15 +52,12 @@ class ChatPresenter(private val chatView: ChatFragment): Contract.Chat.Presenter
             val results = ArrayList<Message>()
 
             if (document?.data?.get("messages") == null) return@addSnapshotListener
-            val messagesData = document.data?.get("messages") as ArrayList<HashMap<String, String>>
-            messagesData.forEachIndexed { index, hashMap ->
-                results.add(
-                    Message(
-                        id = index,
-                        content = hashMap["content"]!!,
-                        sender = User(hashMap["sender"]!!)
-                    )
-                )
+            val messagesData = document.data?.get("messages") as ArrayList<HashMap<String, Any>>
+            messagesData.forEach { it ->
+                results.add(Message(
+                        content = it["content"] as String,
+                        sender = User(it["sender"] as String),
+                        sendDate = (Date(it["sentDate"] as Long))))
             }
 
             chatView.showMessages(results)

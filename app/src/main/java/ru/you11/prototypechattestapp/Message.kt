@@ -1,7 +1,8 @@
 package ru.you11.prototypechattestapp
 
-data class Message(val id: Int,
-              val content: String,
-              val sender: User) {
+import java.util.*
 
-}
+data class Message(val content: String,
+                   val sender: User,
+                   val sendDate: Date
+)

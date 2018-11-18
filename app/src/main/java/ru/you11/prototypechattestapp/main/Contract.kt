@@ -23,7 +23,7 @@ interface Contract {
 
         interface Presenter: BasePresenter {
 
-            fun sendMessage(message: Message)
+            fun sendMessage(content: String)
 
             fun getMessages()
 

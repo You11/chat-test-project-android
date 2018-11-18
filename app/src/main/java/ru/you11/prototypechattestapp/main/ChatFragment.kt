@@ -30,7 +30,9 @@ class ChatFragment: Fragment(), Contract.Chat.View {
             sendButton = findViewById(R.id.message_bar_send_button)
 
             sendButton.setOnClickListener {
-                sendMessage()
+                if (messageInputView.text.isNotBlank()) {
+                    sendMessage()
+                }
             }
 
             setupRecyclerView()
@@ -89,8 +91,10 @@ class ChatFragment: Fragment(), Contract.Chat.View {
     }
 
     override fun sendMessage() {
-        presenter.sendMessage(Message(0, messageInputView.text.toString(), presenter.getCurrentUser()))
+        presenter.sendMessage(messageInputView.text.toString())
+        messageInputView.text.clear()
     }
+
 
     class MessengerRVAdapter(private val messages: ArrayList<Message>): RecyclerView.Adapter<MessengerRVAdapter.ViewHolder>() {
 
