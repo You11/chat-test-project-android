@@ -1,5 +1,6 @@
 package ru.you11.prototypechattestapp.main
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -28,6 +29,9 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         with(root) {
             recyclerView = findViewById(R.id.messages_rv)
             messageInputView = findViewById(R.id.message_bar_edit_text)
+            messageInputView.setOnClickListener {
+                recyclerView.scrollToPosition(messages.size - 1)
+            }
             sendButton = findViewById(R.id.message_bar_send_button)
 
             sendButton.setOnClickListener {
@@ -65,7 +69,9 @@ class ChatFragment: Fragment(), Contract.Chat.View {
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        val layoutManager = LinearLayoutManager(activity)
+        layoutManager.stackFromEnd = true
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = MessengerRVAdapter(messages)
     }
 
@@ -94,6 +100,10 @@ class ChatFragment: Fragment(), Contract.Chat.View {
     override fun sendMessage() {
         presenter.sendMessage(messageInputView.text.toString())
         messageInputView.text.clear()
+    }
+
+    override fun onMessageSent() {
+        recyclerView.smoothScrollToPosition(messages.size - 1)
     }
 
 

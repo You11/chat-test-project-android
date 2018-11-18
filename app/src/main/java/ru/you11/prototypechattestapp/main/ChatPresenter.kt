@@ -33,6 +33,9 @@ class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presente
         val messagesHashMapRoot = HashMap<String, Any>()
         messagesHashMapRoot["messages"] = FieldValue.arrayUnion(messageHashMap)
         db.collection("chats").document("chat").update(messagesHashMapRoot)
+            .addOnSuccessListener {
+                chatView.onMessageSent()
+            }
             .addOnFailureListener { exception ->
                 chatView.showSendMessageError(exception)
             }
