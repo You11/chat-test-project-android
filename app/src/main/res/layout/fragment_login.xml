@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/login_button"
             android:text="@string/login_button_text"
-            android:layout_below="@id/login_username"/>
+            android:layout_below="@id/login_username"
+            android:enabled="false"/>
 
 </RelativeLayout>
