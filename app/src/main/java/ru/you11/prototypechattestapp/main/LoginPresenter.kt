@@ -1,6 +1,7 @@
 package ru.you11.prototypechattestapp.main
 
 import android.content.Context
+import android.graphics.Color
 import com.google.firebase.auth.FirebaseAuth
 import ru.you11.prototypechattestapp.R
 import java.util.*
@@ -32,20 +33,20 @@ class LoginPresenter(private val loginView: LoginFragment): Contract.Login.Prese
             }
     }
 
-    private fun saveUser(username: String, color: String) {
+    private fun saveUser(username: String, color: Int) {
         val sharedPref = loginView.activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         sharedPref.edit()
             .putString(loginView.resources.getString(R.string.shared_pref_username_key), username)
-            .putString(loginView.resources.getString(R.string.shared_pref_color_key), color)
+            .putInt(loginView.resources.getString(R.string.shared_pref_color_key), color)
             .apply()
     }
 
-    private fun generateColor(): String {
+    private fun generateColor(): Int {
         val rand = Random()
-        val red = String.format("%03d", rand.nextInt(200))
-        val green = String.format("%03d", rand.nextInt(200))
-        val blue = String.format("%03d", rand.nextInt(200))
-        return red + green + blue
+        val red = rand.nextInt(200)
+        val green = rand.nextInt(200)
+        val blue = rand.nextInt(200)
+        return Color.argb(255, red, green, blue)
     }
 
 

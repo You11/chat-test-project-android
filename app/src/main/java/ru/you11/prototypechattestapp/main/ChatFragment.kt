@@ -42,8 +42,12 @@ class ChatFragment: Fragment(), Contract.Chat.View {
                 override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     sendButton.isEnabled = text != null && text.isNotBlank()
                 }
-
             })
+            messageInputView.setOnEditorActionListener { textView, i, keyEvent ->
+                sendMessage()
+                true
+            }
+
             sendButton = findViewById(R.id.message_bar_send_button)
 
             sendButton.setOnClickListener {
@@ -109,12 +113,12 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         }
     }
 
-    override fun sendMessage() {
+    private fun sendMessage() {
         presenter.sendMessage(messageInputView.text.toString())
         messageInputView.text.clear()
     }
 
-    override fun onMessageSent() {
+    override fun onMessageSentAndReceived() {
         recyclerView.smoothScrollToPosition(messages.size - 1)
     }
 

@@ -35,7 +35,7 @@ class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presente
         messagesHashMapRoot["messages"] = FieldValue.arrayUnion(messageHashMap)
         db.collection("chats").document("chat").update(messagesHashMapRoot)
             .addOnSuccessListener {
-                chatView.onMessageSent()
+                chatView.onMessageSentAndReceived()
             }
             .addOnFailureListener { exception ->
                 chatView.showSendMessageError(exception)
@@ -72,7 +72,7 @@ class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presente
         val pref = chatView.activity?.getPreferences(Context.MODE_PRIVATE)
         return User(
             name = pref?.getString(chatView.resources.getString(R.string.shared_pref_username_key), "anonymous")!!,
-            color = User.getColorFromDb(pref.getString(chatView.resources.getString(R.string.shared_pref_color_key), "anonymous")!!))
+            color = pref.getInt(chatView.resources.getString(R.string.shared_pref_color_key), 0))
     }
 
     override fun signOutUser() {
