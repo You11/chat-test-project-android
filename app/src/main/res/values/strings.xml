@@ -10,7 +10,7 @@
     <string name="login_button_text">Login</string>
     <string name="unknown_error_text">Something went wrong, please try again later</string>
     <string name="send_message_error_text">Error sending message, please try again later</string>
-    <string name="login_invalid_input">Invalid input</string>
+    <string name="login_invalid_input">Username is blank!</string>
     <string name="shared_pref_username_key" translatable="false">username</string>
     <string name="shared_pref_color_key" translatable="false">color</string>
 

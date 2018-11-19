@@ -2,6 +2,8 @@ package ru.you11.prototypechattestapp.main
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,14 +30,26 @@ class LoginFragment: Fragment(), Contract.Login.View {
 
         with(root) {
             username = findViewById(R.id.login_username)
+            username.setOnEditorActionListener { _, _, _ ->
+                if (username.text.isNotBlank()) {
+                    presenter.loginAsGuest(username.text.toString())
+                    true
+                } else {
+                    false
+                }
+            }
+            username.addTextChangedListener(object: TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    loginButton.isEnabled = text != null && text.isNotBlank()
+                }
+            })
+
             loginButton = findViewById(R.id.login_button)
 
             loginButton.setOnClickListener {
-                if (isUserInputValid()) {
-                    presenter.loginAsGuest(username.text.toString())
-                } else {
-                    pointUserToInvalidInput()
-                }
+                presenter.loginAsGuest(username.text.toString())
             }
         }
 
@@ -49,14 +63,5 @@ class LoginFragment: Fragment(), Contract.Login.View {
         } else {
             Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun isUserInputValid(): Boolean {
-        return username.text.isNotBlank()
-    }
-
-    private fun pointUserToInvalidInput() {
-        username.requestFocus()
-        Toast.makeText(activity, resources.getString(R.string.login_invalid_input), Toast.LENGTH_SHORT).show()
     }
 }

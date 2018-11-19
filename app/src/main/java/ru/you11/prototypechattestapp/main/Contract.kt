@@ -18,7 +18,7 @@ interface Contract {
 
             fun showSendMessageError(exception: Exception?)
 
-            fun onMessageSentAndReceived()
+            fun onMessageSent()
         }
 
         interface Presenter: BasePresenter {

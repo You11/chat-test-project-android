@@ -38,14 +38,17 @@ class ChatFragment: Fragment(), Contract.Chat.View {
             messageInputView.addTextChangedListener(object: TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {}
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
                 override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     sendButton.isEnabled = text != null && text.isNotBlank()
                 }
             })
-            messageInputView.setOnEditorActionListener { textView, i, keyEvent ->
-                sendMessage()
-                true
+            messageInputView.setOnEditorActionListener { _, _, _ ->
+                if (messageInputView.text.isNotBlank()) {
+                    sendMessage()
+                    true
+                } else {
+                    false
+                }
             }
 
             sendButton = findViewById(R.id.message_bar_send_button)
@@ -95,6 +98,8 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         this.messages.clear()
         this.messages.addAll(messages)
         recyclerView.adapter?.notifyDataSetChanged()
+        recyclerView.smoothScrollToPosition(messages.size - 1)
+
     }
 
     override fun showReceiveMessagesError(exception: Exception?) {
@@ -118,7 +123,7 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         messageInputView.text.clear()
     }
 
-    override fun onMessageSentAndReceived() {
+    override fun onMessageSent() {
         recyclerView.smoothScrollToPosition(messages.size - 1)
     }
 
