@@ -134,6 +134,7 @@ class ChatFragment: Fragment(), Contract.Chat.View {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.message.text = messages[position].content
             holder.sender.text = messages[position].sender.name
+            holder.sender.setTextColor(messages[position].sender.color)
 
             val sdt = SimpleDateFormat("HH:mm dd-MM-yy", Locale.getDefault())
 

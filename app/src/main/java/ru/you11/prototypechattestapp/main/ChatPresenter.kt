@@ -29,6 +29,7 @@ class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presente
         messageHashMap["content"] = message.content
         messageHashMap["sender"] = message.sender.name
         messageHashMap["sentDate"] = message.sendDate.time
+        messageHashMap["color"] = getCurrentUser().color
 
         val messagesHashMapRoot = HashMap<String, Any>()
         messagesHashMapRoot["messages"] = FieldValue.arrayUnion(messageHashMap)
@@ -57,7 +58,7 @@ class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presente
                 results.add(
                     Message(
                         content = it["content"] as String,
-                        sender = User(it["sender"] as String),
+                        sender = User(it["sender"] as String, color = (it["color"] as Long).toInt()),
                         sendDate = (Date(it["sentDate"] as Long))
                     )
                 )
@@ -69,7 +70,9 @@ class ChatPresenter(private val chatView: ChatFragment) : Contract.Chat.Presente
 
     override fun getCurrentUser(): User {
         val pref = chatView.activity?.getPreferences(Context.MODE_PRIVATE)
-        return User(pref?.getString(chatView.resources.getString(R.string.shared_pref_username_key), "anonymous")!!)
+        return User(
+            name = pref?.getString(chatView.resources.getString(R.string.shared_pref_username_key), "anonymous")!!,
+            color = User.getColorFromDb(pref.getString(chatView.resources.getString(R.string.shared_pref_color_key), "anonymous")!!))
     }
 
     override fun signOutUser() {

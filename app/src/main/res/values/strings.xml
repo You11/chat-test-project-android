@@ -12,6 +12,7 @@
     <string name="send_message_error_text">Error sending message, please try again later</string>
     <string name="login_invalid_input">Invalid input</string>
     <string name="shared_pref_username_key" translatable="false">username</string>
+    <string name="shared_pref_color_key" translatable="false">color</string>
 
     <string name="menu_sign_out_title">Sign out</string>
 </resources>
